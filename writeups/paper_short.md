@@ -3,6 +3,7 @@
 > 小论文（自洽可读版）。深链：判据与价签的推导见 `blog2_two_walls_placement.md` §8/§9，
 > 测量纪律与"这把尺为什么不合格"见 `blog1_measurement.md` §9，索引与复现见 `README.md` §4/§8。
 > **每个数字后面括号里是归档件 md5 前 8 位**，全部在 `results/`，全部由人自跑并贴全文（机器状态在头行）。
+> English version of this paper: `paper_short_en.md` (translation — where the two disagree, **the Chinese text wins**).
 
 ---
 
