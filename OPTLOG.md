@@ -4536,6 +4536,47 @@ md5 `13f8740c…`，2 块 × 5 gc × 2 dtype = 20 行，闸门 ①②③④⑤�
   **这是同一个坑第二次踩**（第一次是终端输出乱码，当时只改了当次命令、没去扫生成器里的同类调用）
   ⇒ 新硬约束：**凡截断含中文的行，一律 python 按字符切，禁止 `cut -c` / `head -c`**。
 
+### 5.2t 第二十三刀 · 发布侧收口：SSH 认证 + 空仓落地 + PII 两条关闭【✅ 已定稿 · 零新测量 · 零新数字 · 用户零命令】
+
+- **判词不变** = A 主线已结束（结项冻结）· B「更高处」属二期立项；本轮**全部动作在发布层**，实验层一个字没动。
+- **本轮把 `push` 前面三道门逐个实测拆掉**（下列数字全是**环境事实**，模型自跑诊断 ⇒ **不进记录**，不是任何判决表的替代）：
+
+| 门 | 实测凭据 | 结论 |
+|---|---|---|
+| ① 认证 | `ssh -T git@github.com` ⇒ `Hi adomlans! You've successfully authenticated` | ✅ 钥匙被账号接受 |
+| ② 远端仓库存在 | `git -C ~/GV_public ls-remote origin` ⇒ **空输出 + exit 0** | ✅ 空仓、**refs = 0** ⇒ push 不会冲突 |
+| ③ 本地历史与身份 | 19 条 commit · 工作树 0 · `git grep` 真邮箱 0 处 | ✅ 见下方复核五条 |
+
+- **环境侧新事实（覆盖 HANDOFF §5「本机 DNS→127.0.0.1（pypi/HF 全不通）」里 GitHub 那一半）**：
+  ① `/etc/hosts` 里 Steam++ 写死的 github 系 **27 条已被全部注释** ⇒ `getent hosts github.com` 得真 IP、`https://github.com` 回 200、
+  　 `api.github.com` 回 200/301 ⇒ **GitHub 网页在本机可直接打开**（pypi/HF 那条不变）；
+  ② 但路由器 DNS 发下来的 GitHub IP 不可用 ⇒ `~/.ssh/config` 把 `github.com` 钉到**已核对官方 ed25519 指纹**
+  　 （`SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU`，与官方公布值逐字同 ⇒ 不是中间人）的 `20.205.243.160:443` + `IdentitiesOnly yes`，备用 `Host github-22` 走 22 端口；
+  ③ 钥匙 = `~/.ssh/id_ed25519_github`（注释 `github-push-key-2026-11-25`，指纹 `SHA256:Ej730POeqiGDTLLbdpz2gdnznzLNS9htn5yxmfSahh4`），公钥已进 GitHub → Settings → SSH keys；
+  ④ **匿名 GitHub API 60 次/小时已被耗尽**（`remaining: 0`，且它先回 `404` 后回 `403` 会骗人）⇒
+  　 新口径：**「远端仓库在不在 / 有没有 refs」只认拿已认证 SSH 通道跑的 `git ls-remote`**，API 与网页都只当旁证。
+- 🚨**事故一（建仓名）**：空仓第一次建成 **`hetero_moe_placement`（下划线）**，本地 remote 是 `hetero-moe-placement`（连字符）⇒
+  `ls-remote` 一直回 `Repository not found`。根因 = **GitHub 只对大小写不敏感，`_` 与 `-` 是两个不同名字**。
+  修法选了「**网页 Settings → Repository name 改名**」（空仓 + 从未 push ⇒ 零风险），**没有**去迁就下划线改仓库里 3 处链接
+  （那 3 处是第十八刀按 `hetero-moe-placement` 写死的口径，改文档 = 多开一刀 + 把简历上的仓库名换成当初没选的那个）。
+- 🚨**事故二（同一个坑第三次踩）**：我又用 `cut -c1-150` 截含中文的行 ⇒ 终端整屏乱码。§5.2s 已经立过这条硬约束
+  ⇒ **新根因不是不知道，是规矩只写在台账、没进手前检查** ⇒ 硬约束重申：**任何要截断中文行的命令一律先想 python 按字符切**，
+  草稿里出现 `cut -c` / `head -c` 就地作废。
+- 🚨**事故三（脱敏断言自伤）**：给 PII 写的断言命令里**写了邮箱字面量** ⇒ 骨架「正文真邮箱计数 = 0」当场变 1。
+  已改成 `E=<字面量>` 由跑的人代入、**文件里不出现字面量**。**新口径 = 脱敏断言的样例本身必须先过同一条断言**。
+- **PII 两条关闭**（挂过三轮、第十七/十八/廿二刀都写在同一位置的那两行）：
+  - **PII-A** commit 元数据真实 QQ 邮箱 ⇒ 换 **`277908902+adomlans@users.noreply.github.com`**（`277908902` = `adomlans` 的用户 id，API 实测）；
+  - **PII-B** `RESUME_onepage.md:3` 的邮箱 ⇒ **删**，那行只留 handle/学校/专业 ⇒ 与第十八刀「公开面只挂 GitHub handle」对齐。
+- **第二次历史改写 + 硬约束精确化**：第十七刀原话「改写机会已用掉 ⇒ 不许再动历史」的**真实边界**是
+  「**push 之后**不许动历史」（push 之前历史只存在本地，改写不需要 `--force`）。据此第二次改写放在**本轮、push 之前**，
+  用第十七刀验证过的同一条 `git rebase --root --exec 'git commit --amend --no-edit --reset-author'`；**此后 push 已成事实，永远不许再动**。
+- **`TODO_publish.md` 四处陈旧校正**（都是它自己把状态写死成 hash / 「没有钥匙」导致的必然陈旧）：
+  §0「未加 remote、未 push」→ 现状；P0-1「8 条 commit + 根 `3abeced` + HEAD `dc43d70`」→ **不抄 hash**（逐字以 `git log --oneline` 为准）；
+  P0-2「四条认证路都是空的」→ 认证已完成 + 记做法；P0-2 第 3 步的 `git remote add` → **删掉**（重复跑会报错，只剩 `git push -u origin main`）。
+- **push 前复核五条（本轮自跑）**：① `git log --format='%ae' | sort -u` 只剩 noreply 一条；② `git log --format='%an' | sort -u` 只剩 `曹志瑄`；
+  ③ 改写前后 `HEAD^{tree}` 逐字相同（= 只换身份、**没动一个字节内容**）；④ `git status --short | wc -l` = 0；⑤ 真邮箱双通道 = 0。
+- **状态**：✅ 已定稿；**用户侧只剩一条命令** = `git push -u origin main` + 肉眼三查。B3 搁置 / B6 永久挂着 / 旧表一张不动，全部未动。
+
 ### 5.3 P2 —— 停止（写进"局限与未来工作"，不动手）
 
 - 🔴 丙类本机微优化全部冻结：VNNI、寄存器分块、`down` 的 gc 次 bmm 合图。
