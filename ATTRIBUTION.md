@@ -31,7 +31,7 @@ Copyright (c) 2020 Varuna Jayasiri，全文见 `LICENSE`）。本仓库是把其
 # ① 自证：交付物里的每个数都能对回归档（对不上 make_ledger.py 会直接 SystemExit，不出图）
 PY=/home/adomlans/miniconda3/envs/dl_lab/bin/python; $PY writeups/make_ledger.py
 
-# ② 体积与文件数（当前：工作树 4.0MB / 110 个受版本控制文件，另有 .git 2.9MB，GitHub 无压力）
+# ② 体积与文件数（工作树 4.0MB；`git ls-files | wc -l` 现值 111，其中 TODO_publish.md 发布后删除 ⇒ 净 110；另有 .git 2.9MB，GitHub 无压力）
 du -sh --exclude=.git . ; git ls-files | wc -l ; du -sh .git
 
 # ③ 口径扫描：这三条都应当是 0 命中 / 只有「否证」语境的命中
