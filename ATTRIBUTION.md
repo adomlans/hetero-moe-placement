@@ -31,7 +31,7 @@ Copyright (c) 2020 Varuna Jayasiri，全文见 `LICENSE`）。本仓库是把其
 # ① 自证：交付物里的每个数都能对回归档（对不上 make_ledger.py 会直接 SystemExit，不出图）
 PY=/home/adomlans/miniconda3/envs/dl_lab/bin/python; $PY writeups/make_ledger.py
 
-# ② 体积与文件数（工作树 4.0MB；`git ls-files | wc -l` 现值 111，其中 TODO_publish.md 发布后删除 ⇒ 净 110；另有 .git 2.9MB，GitHub 无压力）
+# ② 体积与文件数（工作树 4.0MB、`.git` 2.9MB，GitHub 无压力。🚨文件数**不在正文抄死** ⇒ 以 `git ls-files | wc -l` 现场输出为准）
 du -sh --exclude=.git . ; git ls-files | wc -l ; du -sh .git
 
 # ③ 口径扫描：这三条都应当是 0 命中 / 只有「否证」语境的命中
@@ -58,6 +58,6 @@ grep -rl "/home/adomlans" --include="*.md" . | tee /tmp/paths.txt   # 先看范�
 
 | # | 发布副本相对工作区的差异 | 理由 |
 |---|---|---|
-| 1 | `OPTLOG.md` §5.2n 里那一处**邮箱字符串**替换成「邮箱见仓库级 `.git/config`」（其余逐字同） | 公开仓库会被爬；联系方式只在简历这类一对一文件里给。🚨**但 commit 元数据里的作者邮箱无法在不改写历史的前提下去掉** —— 这一条本仓库**保留真实邮箱**，是有意的 |
+| 1 | `OPTLOG.md` §5.2n 里那一处**邮箱字符串**替换成「邮箱见仓库级 `.git/config`」（其余逐字同） | 公开仓库会被爬；联系方式**公开面一律不写**（简历页眉也只留 GitHub handle）。✅**commit 元数据里的作者邮箱同样已去掉** = 作者与 committer 邮箱都是 GitHub noreply（在 push 之前完成的最后一次历史改写）⇒ 真实邮箱在「正文 + commit 元数据」**双通道 = 0**，复核 = `git log --format='%ae' \| sort -u` 只剩 noreply 一条 |
 | 2 | `TODO_publish.md` 里两处同样的邮箱字符串脱敏；该文件在 push 后 `git rm` | 它是发布清单，不是交付物 |
 | 3 | 两份都**不删历史轮日志**：被后续轮推翻的读数原文保留、只加「谁推翻了它」的注 | 「旧表一张不动」是这套测法的一部分 |
