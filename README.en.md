@@ -144,3 +144,9 @@ is deliberately not published**.
 
 **Author**: 曹志瑄 (Zhixuan Cao) · Jiangsu Police Institute · Cybersecurity and Law Enforcement · sophomore · GitHub [@adomlans](https://github.com/adomlans)
 — no e-mail address in the public repository (scraping); please use Issues.
+　　**Boundary note, stated plainly**: the sentence above covers three places — the current tip's files, every commit's metadata
+　　**and every blob in history** — and it only became true after a full-history rewrite done **after** the first push. Before that
+　　rewrite, this repository's pushed history really did contain a real address (13 file×commit entries). The rewrite's self-check
+　　and the **honest boundary** after the force-push (GitHub may retain the old objects for a while; clones made earlier keep the old
+　　blobs) are in `ATTRIBUTION.md` §5 row 4; the scan command is `ATTRIBUTION.md` §3 item ⑤. Apart from that one string the rewrite
+　　changed not a single byte (tip tree identical, diff = 0 bytes).
