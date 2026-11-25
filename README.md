@@ -64,7 +64,7 @@
 | `writeups/blog2_two_walls_placement.md` | 两堵墙 + 单价判据 + 迁移价签的推导 | 想知道「账是怎么算出来的」 |
 | `writeups/blog3_real_shape_bf16.md` | 真形状 / bf16 / decode 那一段 | 想看落地口径 |
 | `writeups/make_ledger.py` | **两张图的生成脚本，自带对账**：`verify()` 直接解析 `results/` 与 OPTLOG 的 LADDER 表，**对不上就 `SystemExit` 拒绝出图** | 想验证「图上没有一个数是手填的第二次」 |
-| `results/` | **47 份原始归档**（判决表全文 + r5 五进程 dump）。每张的头行是机器状态（date / MHz / loadavg）= 保鲜凭据 | 证据链 |
+| `results/` | **42 张判决表全文 + 5 份 r5 五进程 dump**（合计 47 个文件）。每张的头行是机器状态（date / MHz / loadavg）= 保鲜凭据 | 证据链 |
 | `OPTLOG.md` | 实验日志原件（4300+ 行，含每轮的**事前预测**、落点、挂账、作废记录） | 想看全过程 |
 | `hetero_moe_int8.py` + `avx_gemv_int8.cpp` | 引擎本体：CPU 侧 int8/AVX2 GEMV + GPU 侧常驻专家 + worker 重叠 + CUDA Graph | 想看代码 |
 | `dyn_placement.py`、`bench_dyn*.py`、`bench_drifttrack.py`、`combine_drifttrack.py` | 动态放置 + 漂移语料装置 + **跑前写死的 K 树组合器** | 负结果的装置 |
