@@ -135,3 +135,6 @@ ROUNDS=25 ./run_all.sh dynpair       # 尺子标定（空对照 + 正反序）
 本项目的全部工作集中在 `glu_variants` 子树（`hetero_moe_int8.py`、`avx_gemv_int8.cpp`、35 个 `bench_*.py`、
 `dyn_placement.py`、`combine_drifttrack.py`、`check_redlines.py`、两个探针、`writeups/`、`results/`、`OPTLOG.md`）。
 详见 `ATTRIBUTION.md`（含发布前自查清单）。
+
+**作者**：曹志瑄（江苏警官学院 · 网络安全与执法 · 大二在读）· GitHub [@adomlans](https://github.com/adomlans)
+　—— 公开仓库不写邮箱（防爬），联系走 Issues；邮箱在简历上（简历是一对一文件）。

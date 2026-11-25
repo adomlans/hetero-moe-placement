@@ -31,8 +31,8 @@ git -C ~/GV_public log --format='%h %an <%ae>'   # 校验：8 条都应是 曹�
 所以这一步我替你做完不了，必须你点一次网页。
 
 1. GitHub 网页**建一个空仓库**（🚨 不要勾「Add README」也不要勾 `.gitignore`，会和现有历史冲突）。
-   仓库名建议 `hetero-moe-placement`（对应 README 标题「异构 MoE 的单价判据放置」）；
-   **唯一还缺的信息 = 你的 GitHub 用户名**，给我之后我把本文件与 `RESUME_onepage.md` 里 3 处链接一次性填成真值。
+   仓库名 = **`hetero-moe-placement`**（已按此名把 3 处链接写成真值：`https://github.com/adomlans/hetero-moe-placement`）。
+   🚨**若你最后用了别的仓库名，这 3 处要一起改**：`grep -rn "hetero-moe-placement" --include="*.md" .` ⇒ 改完再 push。
 2. 认证二选一：
    - **省事**：Settings → Developer settings → Fine-grained tokens → 只勾那一个仓库、权限只给 `Contents: Write`；
    - **长期**：`ssh-keygen -t ed25519 -C "你的邮箱"` ⇒ 把 `~/.ssh/id_ed25519.pub` 贴到 GitHub → Settings → SSH and GPG keys。
@@ -48,21 +48,21 @@ git push -u origin main
    - `results/` 网页里是不是 **42 个 .txt + `dt_r5_dumps/` 里 5 个 .json**；
    - 随便点进一张判决表，**头行**有没有 `date` / `MHz` / `loadavg`（那是全仓库可信度的来源）。
 
-### P0-3 简历 —— ✅**7 处已填 6 处【2026-11-25】**，只剩 GitHub 链接
+### P0-3 简历 —— ✅**全部关闭【2026-11-25 第二刀】**（7 处占位 0 残留）
 
 已按 **AI Infra 实习** 定稿：新增 `## 0. 教育背景 · 求职意向`（学校 / 网络安全与执法 / 大二在读 / base 南京 / 意向实习），
 段落顺序**保持负结果在第一块**（实习岗最稀缺的信号就是「会否定自己」，且这与仓库 README 首屏一致）。
 
 ```bash
-grep -n "【" ~/GV_public/RESUME_onepage.md                              # 现在只剩 2 处【GitHub 链接】
-grep -o "【[^】]*】" ~/GV_public/RESUME_onepage.md | wc -l               # push 拿到 URL 后：应为 0
+grep -o "【[^】]*】" ~/GV_public/RESUME_onepage.md | wc -l    # 应为 0
+grep -c "江苏警官学院" ~/GV_public/RESUME_onepage.md          # 应为 2（页眉 + §0）
 ```
-**还缺 / 建议你亲口确认的 4 件**（我不替你编）：
-① **GitHub 用户名 + 仓库名** ⇒ 定了就把 3 处链接填成真值（简历 2 处 + 本文件 P0-2）；
-② **校名全称**：现在按你给的原文写「江苏景观学院」——「网络安全与执法」这个专业名我在**江苏警官学院**的名单里更常见，
-　 简历上校名必须与学历证书逐字一致，请你自己核对后回我一个字（改 / 不改）；
-③ **可补强项**：GPA 或专业排名、相关课程（操作系统 / 计网 / 编译器等）、竞赛或获奖 —— 有就给我，我加 2 行进 §0；没有就留空；
-④ **实习可用时间**（到岗时间 + 每周天数 + 可持续月数）—— 实习岗 HR 必看，一行就够。
+**四项确认的落定结果（用户 2026-11-25 逐条回答）**：
+① ✅ GitHub = `adomlans`、仓库名 = `hetero-moe-placement` ⇒ 3 处链接已填真值；
+② ✅ 校名 = **江苏警官学院**（原文「江苏景观学院」是 jǐngguān 同音误输入，用户确认改）；
+③ ⚪ **可补强项（GPA / 排名 / 课程 / 获奖）：用户决定先不写** ⇒ §0 不留空占位，也不编；日后要加只加 2 行；
+④ ✅ 实习可用时间已写进 §0：**仅寒暑假可到岗（假期内可全职）**
+　 —— 面试被问「学期内能不能远程」就照这句答，**不要现场改口**（口径一致比口径漂亮值钱）。
 
 🚨 别补的：任何「参与过 XX 项目 / 熟悉 XX 框架」这种没有仓库或归档支撑的条目。这份简历的溢价全在**可查**两个字。
 
