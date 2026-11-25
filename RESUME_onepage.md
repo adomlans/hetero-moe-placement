@@ -1,6 +1,6 @@
 # 曹志瑄 · 目标岗位：AI Infra 实习（LLM 推理系统 / 性能工程）
 
-江苏南京 · 邮箱见仓库级 .git/config · github.com/adomlans/hetero-moe-placement · 江苏警官学院 · 网络安全与执法 · 大二在读
+江苏南京 · github.com/adomlans/hetero-moe-placement · 江苏警官学院 · 网络安全与执法 · 大二在读
 
 > 一句话：我在一台 i5-10400 + RTX3060 的台式机上**手写了一套 CPU-GPU 异构 MoE 推理引擎**，
 > 然后用**预设判决树 + 空对照 + 闸门验证**的测量体系，**把自己最初想证明的收益证伪了**，

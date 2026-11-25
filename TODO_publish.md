@@ -9,7 +9,7 @@
 ## 0 · 当前状态（一行）
 
 主线 = **结项冻结**（不再产生新测量）；骨架 = 工作树 4.0MB / **111 个受版本控制文件**（含本文件，发布后删 ⇒ 净 110）/ `results/` 42 张判决表 + 5 份 r5 进程 dump；
-**未加 remote、未 push**；`writeups/README.md` §4 是 42 张归档的逐张索引，§4.1 是「没进正文的 10 张」的显式记账。
+**remote 已加**（`origin = git@github.com:adomlans/hetero-moe-placement.git`，SSH 钥匙已注册、实测 `Hi adomlans!`）、**远端是空仓**（`git ls-remote origin` = 空输出 + exit 0）⇒ **仍未 push**；`writeups/README.md` §4 是 42 张归档的逐张索引，§4.1 是「没进正文的 10 张」的显式记账。
 
 ---
 
@@ -17,30 +17,30 @@
 
 ### P0-1 提交者身份 —— ✅**已完成【2026-11-25】**
 
-全部 8 条 commit 的作者已改写为 **曹志瑄 <邮箱见仓库级 .git/config>**（`git config` 已写进**仓库级** `.git/config`，
-以后在这个仓库新建 commit 会自动带上正确身份）。hash 全部变了：根提交 `3abeced`、当前 HEAD `dc43d70`。
+全部 commit 的作者已改写为 **曹志瑄 <noreply 邮箱>**（改写时 8 条，第二十三刀时 19 条；`git config` 已写进**仓库级** `.git/config`，
+以后在这个仓库新建 commit 会自动带上正确身份）。🚨本文件**不抄 hash**：hash 已随两次改写变过两轮，抄进来必然陈旧 ⇒ 逐字以 `git log --oneline` 为准。
 
 ```bash
-git -C ~/GV_public log --format='%h %an <%ae>'   # 校验：8 条都应是 曹志瑄 <邮箱见仓库级 .git/config>
+git -C ~/GV_public log --format='%ae' | sort -u   # 校验：应只剩 1 条 = 277908902+adomlans@users.noreply.github.com
 ```
-🚨 这次改写**必须在 push 之前**做完（已经做完了）⇒ 从现在起**不要再动历史**；push 之后再改作者就要 `--force`，别那么干。
+🚨 硬约束的**真实边界** = 「**push 之后**不许动历史」（push 之前历史还只在本地，改了不需要 `--force`）。据此第二次改写已放在**第二十三刀**、push 之前 = 作者邮箱由真实 QQ 邮箱换成 GitHub noreply；**这是最后一次**，push 之后一律不许再动。
 
 ### P0-2 建空仓库 + 认证 + push
 
-本机现状：没有 `gh` CLI、`~/.ssh` 里没有私钥、没有 credential helper、没有全局 git 身份 ⇒ **四条认证路都是空的**，
-所以这一步我替你做完不了，必须你点一次网页。
+✅**认证已完成【2026-11-25 · 走 SSH 长期钥匙，PAT 那条没走】**：`ssh-keygen -t ed25519` 生成 `~/.ssh/id_ed25519_github`（注释 `github-push-key-2026-11-25`，
+指纹 `SHA256:Ej730POeqiGDTLLbdpz2gdnznzLNS9htn5yxmfSahh4`）⇒ 公钥已贴进 GitHub → Settings → SSH and GPG keys。本机另有两个坑必须记着：
 
-1. GitHub 网页**建一个空仓库**（🚨 不要勾「Add README」也不要勾 `.gitignore`，会和现有历史冲突）。
-   仓库名 = **`hetero-moe-placement`**（已按此名把 3 处链接写成真值：`https://github.com/adomlans/hetero-moe-placement`）。
-   🚨**若你最后用了别的仓库名，这 3 处要一起改**：`grep -rn "hetero-moe-placement" --include="*.md" .` ⇒ 改完再 push。
-2. 认证二选一：
-   - **省事**：Settings → Developer settings → Fine-grained tokens → 只勾那一个仓库、权限只给 `Contents: Write`；
-   - **长期**：`ssh-keygen -t ed25519 -C "你的邮箱"` ⇒ 把 `~/.ssh/id_ed25519.pub` 贴到 GitHub → Settings → SSH and GPG keys。
-3. 推送（HTTPS 就填用户名 + 把 PAT 当密码；SSH 把 URL 换成 `git@github.com:...`）：
+1. ✅**空仓已建【2026-11-25】**：`https://github.com/adomlans/hetero-moe-placement`（Public；三个初始化勾一个都没勾 ⇒ 远端 `refs = 0`，push 不会冲突）。
+   🚨**这轮踩过的坑（如实记账）**：第一次建成了下划线名 `hetero_moe_placement` ⇒ 本地 `git ls-remote origin` 一直回 `Repository not found`——
+   GitHub 只对**大小写**不敏感，`_` 与 `-` 是两个不同名字。修法 = **网页 Settings → Repository name 改名**（空仓改名零风险），而不是迁就它去改仓库里那 3 处链接（`grep -rn "hetero-moe-placement" --include="*.md" .`）。
+   ① `/etc/hosts` 被 Steam++ 把 github 系 27 条域名写死到 `127.0.0.1`（现已全部注释掉）；② 路由器 DNS 发下来的 GitHub IP 实测不可用
+   ⇒ `~/.ssh/config` 把 `github.com` 直接钉到**已核对官方指纹**（`SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU`）的 `20.205.243.160:443`，
+   `IdentitiesOnly yes`；备用 `Host github-22` 走 22 端口。实测 `ssh -T git@github.com` ⇒ `Hi adomlans! You've successfully authenticated`。
+3. 推送（`origin` 已加好，🚨**别再跑 `git remote add`**，重复加会直接报错）：
 
 ```bash
 cd ~/GV_public
-git remote add origin https://github.com/<用户名>/<仓库名>.git
+# origin 已存在，逐字应是：git@github.com:adomlans/hetero-moe-placement.git —— 校验用 `git remote -v`
 git push -u origin main
 ```
 4. push 后**肉眼三查**（10 秒，专治「本地对、网页错」）：
@@ -67,6 +67,16 @@ grep -c "江苏警官学院" ~/GV_public/RESUME_onepage.md          # 应为 2�
 🚨 别补的：任何「参与过 XX 项目 / 熟悉 XX 框架」这种没有仓库或归档支撑的条目。这份简历的溢价全在**可查**两个字。
 
 ---
+
+### P0-4 PII 两条 —— ✅**已关闭【2026-11-25 第二十三刀】**（它挂了三轮，是唯一真正挡在 `git push` 前面的东西）
+
+- **PII-A｜commit 元数据里的真实 QQ 邮箱**（GitHub 网页上是公开字段，会被爬虫抓走）⇒ 作者邮箱换成
+  **`277908902+adomlans@users.noreply.github.com`**（`277908902` = `adomlans` 的用户 id，API 实测），并把仓库级 `.git/config` 一起换掉。
+  复核 = `git -C ~/GV_public log --format='%ae' | sort -u` 只剩这一条，且 `git log --format='%an' | sort -u` 只剩 `曹志瑄`。
+- **PII-B｜`RESUME_onepage.md` 第 3 行的真实邮箱**（全仓正文唯一一处）⇒ **删邮箱**，那行只留
+  `江苏南京 · github.com/adomlans/hetero-moe-placement · 江苏警官学院 · 网络安全与执法 · 大二在读`，与第十八刀「公开面只挂 GitHub handle」对齐。
+- **双通道断言（push 前必为 0）**：`E=<那个 QQ 邮箱的字面量>`（🚨本文件**故意不写出来**，写进来这条断言就自己失败了）
+  ⇒ `git -C ~/GV_public grep -c "$E" $(git -C ~/GV_public ls-files)` 无输出，且 `git -C ~/GV_public log --format='%ae %an' | grep -c "$E"` 得 0。
 
 ## 2 · 发布前最后一遍自查（5 条，我这轮全跑过；你只需再确认一次）
 
