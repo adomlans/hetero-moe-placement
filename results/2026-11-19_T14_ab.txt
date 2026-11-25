@@ -1,0 +1,91 @@
+== 机器状态 ==
+governor=performance MHz=4091.091 loadavg=0.27 0.47 0.43
+可用核数=12  物理核= 6
+🚨 loadavg > 1.5 时绝对值整体偏高(桌面在抢核), 只看同一次运行内的相对值
+== /home/adomlans/miniconda3/envs/dl_lab/bin/python bench_t14_ab.py ==
+正在编译 AVX2 INT8 扩展 (maddubs 路径 —— 本机 i5-10400 无 AVX-VNNI)
+/home/adomlans/miniconda3/envs/dl_lab/lib/python3.11/site-packages/triton/knobs.py:504: UserWarning: TRITON_DEFAULT_FP_FUSION is unset: defaulting to FP fusion ENABLED for backward compatibility in Triton 3.9. The default will change to DISABLED in Triton 3.10; set TRITON_DEFAULT_FP_FUSION=1 to keep fusion enabled or =0 to adopt the new default early and silence this warning.
+  warn_once(FP_FUSION_DEFAULT_WARNING)
+=== 放置规则 v2 (和主表同 seed 同 x) ===
+🚨[工作集] CPU侧常驻 6 专家 x 2MB = 12MB > L3 12MB => 字节墙约 49us/专家(2MB / 42GB/s); 每专家摊到 >=5 个 slot 就转成 AVX2 算力墙(见 T8-① 注释与 T14)。 0.75xL3 预算 = 最多 4 个常驻; 真预算按【有流量的专家】记, 见 plan_gpu_capacity / T13
+  A: gc=3(预测0us) 命中率对账 OK  CPU侧有流量的专家 slot 数: e6=1.0 e7=5.0
+  C: gc=3(预测1us) 命中率对账 OK  CPU侧有流量的专家 slot 数: e5=29.0 e6=26.0 e7=4.0
+🚨[工作集] CPU侧常驻 5 专家 x 2MB = 10MB > L3 12MB => 字节墙约 49us/专家(2MB / 42GB/s); 每专家摊到 >=5 个 slot 就转成 AVX2 算力墙(见 T8-① 注释与 T14)。 0.75xL3 预算 = 最多 4 个常驻; 真预算按【有流量的专家】记, 见 plan_gpu_capacity / T13
+=== 正确性闸门 A: kernel 级 loop×sched×tb 全部必须与【原状 loop0/sched0/tb8】逐位相同 ===
+  A loop=0 sched=0 tb=1  差 = 0.000000000  OK
+  A loop=0 sched=0 tb=2  差 = 0.000000000  OK
+  A loop=0 sched=0 tb=4  差 = 0.000000000  OK
+  A loop=0 sched=0 tb=8  差 = 0.000000000  OK
+  A loop=0 sched=1 tb=1  差 = 0.000000000  OK
+  A loop=0 sched=1 tb=2  差 = 0.000000000  OK
+  A loop=0 sched=1 tb=4  差 = 0.000000000  OK
+  A loop=0 sched=1 tb=8  差 = 0.000000000  OK
+  A loop=1 sched=0 tb=1  差 = 0.000000000  OK
+  A loop=1 sched=0 tb=2  差 = 0.000000000  OK
+  A loop=1 sched=0 tb=4  差 = 0.000000000  OK
+  A loop=1 sched=0 tb=8  差 = 0.000000000  OK
+  A loop=1 sched=1 tb=1  差 = 0.000000000  OK
+  A loop=1 sched=1 tb=2  差 = 0.000000000  OK
+  A loop=1 sched=1 tb=4  差 = 0.000000000  OK
+  A loop=1 sched=1 tb=8  差 = 0.000000000  OK
+  C loop=0 sched=0 tb=1  差 = 0.000000000  OK
+  C loop=0 sched=0 tb=2  差 = 0.000000000  OK
+  C loop=0 sched=0 tb=4  差 = 0.000000000  OK
+  C loop=0 sched=0 tb=8  差 = 0.000000000  OK
+  C loop=0 sched=1 tb=1  差 = 0.000000000  OK
+  C loop=0 sched=1 tb=2  差 = 0.000000000  OK
+  C loop=0 sched=1 tb=4  差 = 0.000000000  OK
+  C loop=0 sched=1 tb=8  差 = 0.000000000  OK
+  C loop=1 sched=0 tb=1  差 = 0.000000000  OK
+  C loop=1 sched=0 tb=2  差 = 0.000000000  OK
+  C loop=1 sched=0 tb=4  差 = 0.000000000  OK
+  C loop=1 sched=0 tb=8  差 = 0.000000000  OK
+  C loop=1 sched=1 tb=1  差 = 0.000000000  OK
+  C loop=1 sched=1 tb=2  差 = 0.000000000  OK
+  C loop=1 sched=1 tb=4  差 = 0.000000000  OK
+  C loop=1 sched=1 tb=8  差 = 0.000000000  OK
+
+=== 正确性闸门 B: 端到端 L2 输出, guided / 换序 vs 原状 逐位 ===
+  A guided(新)            差 = 0.000000000  OK
+  A guided+换序            差 = 0.000000000  OK
+  C guided(新)            差 = 0.000000000  OK
+  C guided+换序            差 = 0.000000000  OK
+
+=== kernel-only 卡尺(纯 CPU, 真帧的权重+slot 分布; 每格 = min/p50 us) ===
+配置   抢核         slot   原状趟数           static,32(原状)               guided(新)               guided+换序
+A    无             6    2           120/122                 101/105                 102/118         算力上限对照 105 GMAC/s
+A    1@cpu0        6    2           116/116                  94/97                   93/114         算力上限对照 109 GMAC/s
+A    2@cpu0,1      6    2           121/124                 104/108                 109/111         算力上限对照 104 GMAC/s
+C    无            59    9           472/482                 451/458                 463/511         算力上限对照 262 GMAC/s
+C    1@cpu0       59    9           782/803                 672/703                 559/610         算力上限对照 158 GMAC/s
+C    2@cpu0,1     59    9           795/835                 696/730                 643/663         算力上限对照 156 GMAC/s
+
+=== 端到端 无抢核(桌面安静时≈这一行) | loadavg=1.43/0.76 轮转 11 轮 | L2 端到端 p50 ms ===
+配置   delay变体                       p50   σ%     min     vs原状      更慢轮数
+A      0.0static,32(原状)          0.287    5   0.256     0.0%       0/11
+A      0.0guided(新)              0.267    3   0.254    -6.8%       2/11
+A      0.0guided+换序              0.286    5   0.256    -0.1%       5/11
+A      3.0static,32(原状)          3.527    1   3.475     0.0%       0/11
+A      3.0guided(新)              3.501    1   3.471    -0.7%       2/11
+A      3.0guided+换序              3.512    0   3.492    -0.4%       3/11
+C      0.0static,32(原状)          0.854   15   0.672     0.0%       0/11
+C      0.0guided(新)              0.749    9   0.640   -12.4%       2/11
+C      0.0guided+换序              0.787   11   0.644    -7.8%       4/11
+C      3.0static,32(原状)          4.028    2   3.963     0.0%       0/11
+C      3.0guided(新)              4.007    1   3.927    -0.5%       6/11
+C      3.0guided+换序              3.948    2   3.908    -2.0%       3/11
+
+=== 端到端 外挂 1 个抢核进程@cpu0 ← 真实帧的条件 | loadavg=2.13/1.01 轮转 11 轮 | L2 端到端 p50 ms ===
+配置   delay变体                       p50   σ%     min     vs原状      更慢轮数
+A      0.0static,32(原状)          0.288   16   0.280     0.0%       0/11
+A      0.0guided(新)              0.277   28   0.257    -3.8%       3/11
+A      0.0guided+换序              0.299   29   0.265     3.7%       7/11
+A      3.0static,32(原状)          3.509    5   3.485     0.0%       0/11
+A      3.0guided(新)              3.501    9   3.482    -0.2%       3/11
+A      3.0guided+换序              3.524    5   3.497     0.4%       8/11
+C      0.0static,32(原状)          0.972   30   0.938     0.0%       0/11
+C      0.0guided(新)              0.802   30   0.720   -17.5%       0/11
+C      0.0guided+换序              0.866   22   0.716   -11.0%       0/11
+C      3.0static,32(原状)          4.154    8   4.097     0.0%       0/11
+C      3.0guided(新)              4.054    6   3.932    -2.4%       1/11
+C      3.0guided+换序              4.074    9   4.003    -1.9%       3/11

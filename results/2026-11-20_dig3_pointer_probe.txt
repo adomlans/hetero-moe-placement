@@ -1,0 +1,128 @@
+正在编译 AVX2 INT8 扩展 (maddubs 路径 —— 本机 i5-10400 无 AVX-VNNI)
+[机器状态] governor=performance MHz=4103.9 loadavg=0.49/0.63 OMP_PLACES=cores OMP_PROC_BIND=close threads=12
+[真源] SmolLM-135M: D=576 N=1536 层数=30 | 取 [0, 4, 8, 12, 16, 20, 24, 28] 层的 MLP 当 8 个专家 | top_k=2 | 路由=embed | 激活=第 8 层 MLP 入口(真英文文本跑出来的)
+[被测] bs=[1] | 形状=['swiglu'] | gc=5(钉死, 不跑 T13 规则) | 轮转 1 轮 x 每轮 1 次取中位
+Loading weights:   0%|          | 0/272 [00:00<?, ?it/s]Loading weights: 100%|██████████| 272/272 [00:00<00:00, 18159.18it/s]
+
+== 段0 权重/激活统计: 真 vs 玩具(int8 吃的就是 amax/127 这个步长) ==
+来源                      矩阵       std    max|w|      int8步长
+SmolLM-135M/L0           g    0.2320     2.781   2.190e-02
+SmolLM-135M/L0           u    0.2488     2.781   2.190e-02
+SmolLM-135M/L0           d    0.2487     4.062   3.199e-02
+SmolLM-135M/L15          g    0.2395     3.203   2.522e-02
+SmolLM-135M/L15          u    0.2526     1.656   1.304e-02
+SmolLM-135M/L15          d    0.2436     2.953   2.325e-02
+SmolLM-135M/L29          g    0.2238     2.000   1.575e-02
+SmolLM-135M/L29          u    0.2755     4.469   3.519e-02
+SmolLM-135M/L29          d    0.2457     6.125   4.823e-02
+玩具(入库 randn std=1)    w    0.9999     5.248   4.132e-02
+激活                               std    max|x|    行范数mean
+真激活                           0.1038     1.342       2.46
+同尺度高斯                         0.1028     0.475       2.47
+std=1玩具                       1.0001     4.830      23.99
+  每专家 int8: 真 swiglu 3x576x1536=2.53MB / 真 gemm 576x1536=0.84MB   (玩具 swiglu 6.00MB / gemm 2.00MB) => 真形状是玩具 swiglu 的 0.42x
+  字节墙/专家: 真 swiglu 63us (玩具 149us); CPU 常驻 3 个 = 7.6MB vs L3 12MB
+
+== 段1 真路由命中分布(512 行, 每 64 行一帧累计; 对照 = 同一批真激活) ==
+  路由=embed  命中% = [42.3, 13.2, 17.7, 6.8, 1.4, 12.6, 6.0, 0.1]  最热/最冷 = 433.0x
+  路由=randn  命中% = [21.1, 15.6, 3.0, 8.9, 14.2, 11.3, 12.2, 13.7]  ← 对照组: 这档若接近均匀(1/8=12.5%), 说明上面那档的偏斜来自真投影方向, 不是我们 bias 拧的
+  A 序(新id0=最热旧层)= [0, 2, 1, 5, 3, 6, 4, 7]   C 序(新id0=最冷旧层)= [7, 4, 6, 3, 5, 1, 2, 0]
+  旧 id 下前 8 帧的 top_k = [[0, 2], [2, 0], [2, 5], [0, 2], [0, 2], [7, 5], [2, 1], [1, 3]]
+
+====================================================================================================
+swiglu | bs=  1 | 配置A 放对: 真最热的 gc 个进 GPU | gc=5 | CPU 驻 3 个专家 | 新序命中率%=[42.3, 17.7, 13.2, 12.6, 6.8, 6.0, 1.4, 0.1]
+====================================================================================================
+    本帧 CPU 腿 slot=0 每专家 slot=[0, 0, 0] 最大 0 → 【字节墙】(交叉点≈5) | 每专家 2.53MB 字节墙≈63us | 常驻 7.6MB vs L3 12MB
+/home/adomlans/miniconda3/envs/dl_lab/lib/python3.11/site-packages/triton/knobs.py:504: UserWarning: TRITON_DEFAULT_FP_FUSION is unset: defaulting to FP fusion ENABLED for backward compatibility in Triton 3.9. The default will change to DISABLED in Triton 3.10; set TRITON_DEFAULT_FP_FUSION=1 to keep fusion enabled or =0 to adopt the new default early and silence this warning.
+  warn_once(FP_FUSION_DEFAULT_WARNING)
+  闸门 三模式互差=0.000000000  inf/nan=0  本帧 CPU 腿 slot=0
+  整条 L2 vs 本实例 fp32 裁判(权重/形状三档全同, 只换激活): 真激活 relRMSE=0.0001%/max_abs=1.62e-05/CPU腿0slot  同尺度高斯 relRMSE=3.0698%/max_abs=0.0694/CPU腿1slot  std=1玩具 relRMSE=6.1450%/max_abs=46.3/CPU腿1slot
+  精度四笔: 🚨跳过 —— 本帧 CPU 腿 0 个 slot, 整条 relRMSE 不是量化的代价
+🚨[工作集] CPU侧常驻 8 专家 x 2MB = 20MB > L3 12MB => 字节墙约 147us/专家(2MB / 42GB/s); 每专家摊到 >=5 个 slot 就转成 AVX2 算力墙(见 T8-① 注释与 T14)。 0.75xL3 预算 = 最多 3 个常驻; 真预算按【有流量的专家】记, 见 plan_gpu_capacity / T13
+通路                p50独占    p50轮转   σ%轮     vs①轮转     更慢轮   relRMSE真     峰值显存MB   tok/s轮转
+⓪T4 基线            1.152        —     —  +239.0%       —          —       58.8       868
+①异质 gc=5          0.340    0.556     0     +0.0%      0/1    0.0001%      186.1      1798
+③纯GPU gc=8        0.452    0.569     0     +2.4%      1/1    0.0001%      299.0      1756
+④纯CPU gc=0        0.610    0.735     0    +32.1%      1/1    7.2267%        0.1      1361
+  ①异质 换激活(路由也跟着换): 真激活 0.0001%/CPU腿0slot  同尺度高斯 3.0698%/CPU腿1slot  std=1玩具 6.1450%/CPU腿1slot
+  ①异质 轮间: 0.556
+
+====================================================================================================
+swiglu | bs=  1 | 配置C 放错: 真最冷的 gc 个进 GPU | gc=5 | CPU 驻 3 个专家 | 新序命中率%=[0.1, 1.4, 6.0, 6.8, 12.6, 13.2, 17.7, 42.3]
+====================================================================================================
+    本帧 CPU 腿 slot=2 每专家 slot=[0, 1, 1] 最大 1 → 【字节墙】(交叉点≈5) | 每专家 2.53MB 字节墙≈63us | 常驻 7.6MB vs L3 12MB
+  闸门 三模式互差=0.000000000  inf/nan=0  本帧 CPU 腿 slot=2
+  整条 L2 vs 本实例 fp32 裁判(权重/形状三档全同, 只换激活): 真激活 relRMSE=7.2267%/max_abs=0.209/CPU腿2slot  同尺度高斯 relRMSE=4.9813%/max_abs=0.0743/CPU腿1slot  std=1玩具 relRMSE=0.0001%/max_abs=0.000519/CPU腿0slot
+  精度四笔(只量 CPU 腿 2 个 slot, 分母=本实例 CPU 腿 fp32 真值 rms=0.796):
+    ①只有 W 量化      relRMSE=4.4110%
+    ②W+x 量化        relRMSE=5.2886%   (+x 这一笔 +0.8776pp)
+    ③W+x+h 再量化     relRMSE=7.2267%   (+h 这一笔 +1.9381pp)
+    ④kernel 实测      relRMSE=7.2267%   ④vs③ 绝对=5.16e-06 (③量级 11.3 => 相对 4.6e-07) OK(≤1 LSB 级)
+    中间量幅度(判 fp16 上限 65504): max|g|=5.92 max|u|=6.2 max|h|=13.6  => fp16 不溢出
+
+  🚨[dig3] 抛 expert id 15 out of range m=4496 scope=full bs=1
+     现场: _gate_wt=0x7e1236209a00 gate.b=0x7e12ae205c00 _sx=0x7e12ae207400 _sti=0x7e1236400200 _sxq=0x7e1236400400 gkey=(1, 'full', (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), device(type='cuda', index=0))
+     ---- 该模型最近的指针轨迹 ----
+          └写进 _sts/_sti/_sxq = 0x7e1234400000/0x7e1234400200/0x7e1234400400
+          └写进 _sts/_sti/_sxq = 0x7e1230400000/0x7e1230400200/0x7e1230400400
+          └写进 _sts/_sti/_sxq = 0x7e1227e00000/0x7e1227e00200/0x7e1227e00400
+          └写进 _sts/_sti/_sxq = 0x7e126f800000/0x7e126f800200/0x7e126f800400
+          └写进 _sts/_sti/_sxq = 0x7e122a400000/0x7e122a400200/0x7e122a400400
+          └写进 _sts/_sti/_sxq = 0x7e1215e00000/0x7e1215e00200/0x7e1215e00400
+          └写进 _sts/_sti/_sxq = 0x7e1221600000/0x7e1221600200/0x7e1221600400
+          └写进 _sts/_sti/_sxq = 0x7e1238400000/0x7e1238400200/0x7e1238400400
+      rq  cap=0 m=4496 gw=None b=8x@0x7e12ae205c00 x=1x576@0x7e12ae207400
+      ⚠️ _gate_wt 被重建 m=4496 0x0 -> 0x7e1236209a00 cap=0
+      rq  cap=0 m=4496 gw=576x16@0x7e1236209a00 b=8x@0x7e12ae205c00 x=1x576@0x7e12ae207400
+      rq  cap=0 m=4496 gw=576x16@0x7e1236209a00 b=8x@0x7e12ae205c00 x=1x576@0x7e12ae207400
+      rq  cap=1 m=4496 gw=576x16@0x7e1236209a00 b=8x@0x7e12ae205c00 x=1x576@0x7e12ae207400
+          └写进 _sts/_sti/_sxq = 0x7e1236400000/0x7e1236400200/0x7e1236400400
+     _sti=[[15, 15]] _sts=[[nan, nan]] _sxq[:3]=[0, -4, -4] _sxs=[0.010300613939762115]
+     _gate_wt: nan=0 inf=0 absmax=2.75
+     gate.w: nan=0 inf=0 absmax=2.75
+     gate.b: nan=0 inf=0 absmax=0
+     _sx: nan=0 inf=0 absmax=1.308
+     eager 用当前 gate.w 跑同一 _sx: idx=[[7, 6]] nan=0
+     ▶ 再 replay 一次: _sti=[[7, 6]] _sts=[[0.2811748683452606, 0.14576666057109833]]
+     ▶ eager fused 写进新缓冲: idx=[[7, 6]] sc=[[0.2811748683452606, 0.14576666057109833]] (新缓冲 0x7e12ae207e00)
+Traceback (most recent call last):
+  File "/tmp/dig3_run.py", line 71, in <module>
+    runpy.run_path(os.path.join(HERE, 'bench_real.py'), run_name='__main__')
+  File "<frozen runpy>", line 291, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/adomlans/dev_ws/annotated_deep_learning_paper_implementations/labml_nn/transformers/glu_variants/bench_real.py", line 271, in <module>
+    m = mk(gc, order, kind, cfg); warm(m, x, 20)
+                                  ^^^^^^^^^^^^^^
+  File "/home/adomlans/dev_ws/annotated_deep_learning_paper_implementations/labml_nn/transformers/glu_variants/bench_real.py", line 147, in warm
+    fwd(m, x)
+  File "/home/adomlans/dev_ws/annotated_deep_learning_paper_implementations/labml_nn/transformers/glu_variants/bench_real.py", line 71, in fwd
+    return m(x, async_mode=True, mode=MODE)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/adomlans/miniconda3/envs/dl_lab/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1787, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/adomlans/miniconda3/envs/dl_lab/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1798, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/adomlans/dev_ws/annotated_deep_learning_paper_implementations/labml_nn/transformers/glu_variants/hetero_moe_int8.py", line 527, in forward
+    return self._forward_async_L2(x)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/adomlans/dev_ws/annotated_deep_learning_paper_implementations/labml_nn/transformers/glu_variants/hetero_moe_int8.py", line 1117, in _forward_async_L2
+    fut.result()
+  File "/home/adomlans/miniconda3/envs/dl_lab/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/adomlans/miniconda3/envs/dl_lab/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/adomlans/miniconda3/envs/dl_lab/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/adomlans/dev_ws/annotated_deep_learning_paper_implementations/labml_nn/transformers/glu_variants/hetero_moe_int8.py", line 1075, in cpu_worker
+    self._cpu_swiglu_into(p["xq"], p["sc"], p["idx"], p["scr"], p["out"], True)
+  File "/tmp/dig3_run.py", line 41, in traced
+    return orig(self, xq, sc, ti, ts, out, rg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/adomlans/dev_ws/annotated_deep_learning_paper_implementations/labml_nn/transformers/glu_variants/hetero_moe_int8.py", line 979, in _cpu_swiglu_into
+    avx_gemv_ext.avx2_moe_cpu_experts_int8_swiglu_into(
+RuntimeError: expert id 15 out of range

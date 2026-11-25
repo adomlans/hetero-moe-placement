@@ -1,0 +1,31 @@
+== 机器状态 ==
+governor=performance MHz=4093.245 loadavg=0.44 0.10 0.03
+可用核数=12  物理核= 6
+🚨 loadavg > 1.5 时绝对值整体偏高(桌面在抢核), 只看同一次运行内的相对值
+== /home/adomlans/miniconda3/envs/dl_lab/bin/python bench_halves.py ==
+正在编译 AVX2 INT8 扩展 (maddubs 路径 —— 本机 i5-10400 无 AVX-VNNI)
+/home/adomlans/miniconda3/envs/dl_lab/lib/python3.11/site-packages/triton/knobs.py:504: UserWarning: TRITON_DEFAULT_FP_FUSION is unset: defaulting to FP fusion ENABLED for backward compatibility in Triton 3.9. The default will change to DISABLED in Triton 3.10; set TRITON_DEFAULT_FP_FUSION=1 to keep fusion enabled or =0 to adopt the new default early and silence this warning.
+  warn_once(FP_FUSION_DEFAULT_WARNING)
+L3=12MB bs=32 端到端轮数=7 被测形状=['gemm'] gc=[2, 3, 4, 5]  (每专家 gemm=2MB / swiglu=6MB)
+🚨[工作集] CPU侧常驻 6 专家 x 2MB = 12MB > L3 12MB => 字节墙约 49us/专家(2MB / 42GB/s); 每专家摊到 >=5 个 slot 就转成 AVX2 算力墙(见 T8-① 注释与 T14)。 0.75xL3 预算 = 最多 4 个常驻; 真预算按【有流量的专家】记, 见 plan_gpu_capacity / T13
+🚨[工作集] CPU侧常驻 5 专家 x 2MB = 10MB > L3 12MB => 字节墙约 49us/专家(2MB / 42GB/s); 每专家摊到 >=5 个 slot 就转成 AVX2 算力墙(见 T8-① 注释与 T14)。 0.75xL3 预算 = 最多 4 个常驻; 真预算按【有流量的专家】记, 见 plan_gpu_capacity / T13
+
+==========================================================================================
+配置A 命中率 [40.6, 46.9, 3.1, 0.0, 0.0, 0.0, 1.6, 7.8] 本帧 CPU 腿 slot=8  loadavg=0.89
+==========================================================================================
+     形状  gc   CPU被摸MB   CPU常驻MB    GPU半边    CPU半边   max(半,半)      端到端     预测=实测?
+  [gemm] 实测最优 gc=3 | 只看两半边的 max() 会选 gc=2 → 模型不够, 还得加项
+   gemm   2         6        12    0.131    0.100      0.131    0.281
+   gemm   3         4        10    0.165    0.071      0.165    0.256
+   gemm   4         4         8    0.193    0.106      0.193    0.283
+   gemm   5         4         6    0.220    0.071      0.220    0.307
+
+==========================================================================================
+配置C 命中率 [1.6, 4.7, 1.6, 0.0, 0.0, 45.3, 40.6, 6.2] 本帧 CPU 腿 slot=60  loadavg=1.30
+==========================================================================================
+     形状  gc   CPU被摸MB   CPU常驻MB    GPU半边    CPU半边   max(半,半)      端到端     预测=实测?
+  [gemm] 实测最优 gc=5 | 只看两半边的 max() 会选 gc=5 → 模型成立, 规则可以给 GPU 半边定价
+   gemm   2         8        12    0.131    0.510      0.510    0.759
+   gemm   3         6        10    0.163    0.463      0.463    0.727
+   gemm   4         6         8    0.195    0.533      0.533    0.794
+   gemm   5         6         6    0.222    0.448      0.448    0.726
