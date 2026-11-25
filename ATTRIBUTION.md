@@ -10,9 +10,10 @@ Copyright (c) 2020 Varuna Jayasiri，全文见 `LICENSE`）。本仓库是把其
 | 内容 | 归属 |
 |---|---|
 | `hetero_moe_int8.py`、`avx_gemv_int8.cpp`、`pre_fused.py`、`dyn_placement.py`、`gpu_traffic.py`、`real_smollm.py`、`budget_check.py`、`combine_drifttrack.py`、`check_redlines.py`、`bench_*.py`(35 个，仓库共 46 个 .py)、`run_all.sh`、`sweep_aff.sh`、`scan_drift.py`、`probe_b3_machine.sh` | **本项目的工作** |
-| `writeups/`（5 篇 + 2 张图 + `make_ledger.py`）、`results/`（47 份原始归档）、`OPTLOG.md` | **本项目的工作** |
+| `writeups/`（5 篇 + 2 张图 + `make_ledger.py`）、`results/`（**42 张判决表 + 5 份 r5 进程 dump = 47 个文件**）、`OPTLOG.md` | **本项目的工作** |
 | `simple.py`、`simple.ipynb`、`experiment.py`、`benchmark_engine.py`、`__init__.py` | 上游教程文件，**本仓库有意未收录**（不是本项目的工作；且本地工作副本处于学习期改动状态，不适合发布） |
 | `triton_moe_kernel.py` | 学习期试验件，与主线结论**无关**，保留只为完整 |
+| `HANDOFF.md` | **内部交接台账**（协作协议 + 本机绝对路径 + 逐轮状态行），**有意未收录** ⇒ `OPTLOG.md` 里 23 处「HANDOFF」引用读作内部台账，**不影响任何复现命令** |
 
 ## 2. 口径声明（读这个仓库之前必须知道）
 
@@ -30,8 +31,8 @@ Copyright (c) 2020 Varuna Jayasiri，全文见 `LICENSE`）。本仓库是把其
 # ① 自证：交付物里的每个数都能对回归档（对不上 make_ledger.py 会直接 SystemExit，不出图）
 PY=/home/adomlans/miniconda3/envs/dl_lab/bin/python; $PY writeups/make_ledger.py
 
-# ② 体积与文件数（当前 ≈3.9MB / 108 个文件，GitHub 无压力）
-du -sh . ; find . -type f | wc -l
+# ② 体积与文件数（当前：工作树 4.0MB / 110 个受版本控制文件，另有 .git 2.9MB，GitHub 无压力）
+du -sh --exclude=.git . ; git ls-files | wc -l ; du -sh .git
 
 # ③ 口径扫描：这三条都应当是 0 命中 / 只有「否证」语境的命中
 grep -rn "自适应放置有效\|动态放置有效" --include="*.md" . | grep -v "不含\|不是"
