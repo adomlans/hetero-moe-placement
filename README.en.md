@@ -120,15 +120,18 @@ Verdict tables are run by the author and committed in full (machine state in the
 |---|---|---|
 | `README.en.md` | this front page | EN |
 | `writeups/paper_short_en.md` | **English short paper** (self-contained: abstract + 8 sections + limitations + reproduction) | EN |
+| `writeups/blog1_measurement_en.md` | **English blog1** (metrology: three error axes, two memory columns, two kinds of scales, ten gates, and how the ruler got proven unfit) | EN |
 | `README.md` | Chinese front page (authoritative) | ZH |
 | `writeups/paper_short.md` | Chinese short paper (authoritative) | ZH |
 | `writeups/README.md` | deliverable index: §4 lists all 42 archived tables with their freshness credentials, §4.1 accounts for the 10 that never made the text, §7 limitations (honest version) | ZH |
-| `writeups/blog1_measurement.md` / `writeups/blog2_two_walls_placement.md` / `writeups/blog3_real_shape_bf16.md` | measurement discipline / the two walls and the price derivation / real shape + bf16 + decode | ZH |
+| `writeups/blog1_measurement.md` / `writeups/blog2_two_walls_placement.md` / `writeups/blog3_real_shape_bf16.md` | measurement discipline / the two walls and the price derivation / real shape + bf16 + decode | ZH (blog1 also exists in English above; blog2/blog3 do not) |
 | `OPTLOG.md` | the lab log itself (4000+ lines: pre-registration, landing, bookings, invalidations) | ZH |
 | `results/` | **42 verdict tables + 5 five-process dumps from r5** | raw |
 
-🚨 **Translation status, stated plainly**: the short paper and this front page are translated; the three blogs, the `writeups/README.md`
-index and `OPTLOG.md` are **not** (they are ~10x the length and are working logs, not claims). Nothing in them was rewritten while translating.
+🚨 **Translation status, stated plainly**: the short paper, this front page and **blog1** (`writeups/blog1_measurement_en.md`) are translated;
+the other two blogs, the `writeups/README.md` index and `OPTLOG.md` are **not** — together they are about an order of magnitude longer than
+everything that is translated, and they are working logs, not claims. While translating, **no sentence of the Chinese originals was changed**
+(the only edit to them is one inserted pointer line pointing at the translation; machine-checked as `git diff` **deleted lines = 0**).
 
 **Term map** (for reading the Chinese tables): 空对照 = empty/never-firing control arm · `底_pair` = pair floor · `底_序` = order floor ·
 挂账 = booked unsettled (no verdict) · 预设判决树 = pre-registered decision tree · 前置 = pre-check · 落点 = landing ·

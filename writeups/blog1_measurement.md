@@ -1,5 +1,7 @@
 # blog1 · 测量学 —— 这台机器上"把话说真"的成本
 
+> English version of this blog: `blog1_measurement_en.md` (translation — where the two disagree, **the Chinese text wins**).
+
 > **写作红线（四篇共用，贴在页眉）**：
 > ① **一阶量与二阶量两列并报**：relRMSE/L2rel 与 top-1 一致率/KL/TV 必须同时出现，"误差 <1%" 不许单独成句（方法论 22）。
 > ② **质量只报相对量，且必须附参照行**：把真第 8 层 MLP 换成"8 选 2 的 fp32 稠密 MoE"本身就值 KL 1.897e-01（bs=32）/ 8.854e-02（bs=128）⇒ 比引擎最狠那档贵 **668x / 871x**。
