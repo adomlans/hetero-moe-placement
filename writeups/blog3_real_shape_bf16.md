@@ -1,5 +1,7 @@
 # blog3 · 真形状与 bf16 —— 换到真权重上哪些结论活着，以及两笔分开付的钱
 
+> English version of this blog: `blog3_real_shape_bf16_en.md` (translation — where the two disagree, **the Chinese text wins**).
+
 > **写作红线（四篇共用，贴在页眉）**：
 > ① **一阶量与二阶量两列并报**："误差 <1%" 不许单独成句（L2 差 11.6x 时 KL 差 303x，gc=0→1 那一格两列方向相反）。
 > ② **质量只报相对量 + 必附参照行**：换成 8 选 2 fp32 稠密 MoE 本身就值 KL 1.897e-01(bs=32) / 8.854e-02(bs=128) ⇒ 比引擎最狠那档贵 **668x / 871x**。

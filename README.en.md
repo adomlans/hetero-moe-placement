@@ -122,22 +122,25 @@ Verdict tables are run by the author and committed in full (machine state in the
 | `writeups/paper_short_en.md` | **English short paper** (self-contained: abstract + 8 sections + limitations + reproduction) | EN |
 | `writeups/blog1_measurement_en.md` | **English blog1** (metrology: three error axes, two memory columns, two kinds of scales, ten gates, and how the ruler got proven unfit) | EN |
 | `writeups/blog2_two_walls_placement_en.md` | **English blog2** (the two walls, placement rule v1→v2, the four missing legs and the fifth: the price tag of a migration) | EN |
+| `writeups/blog3_real_shape_bf16_en.md` | **English blog3** (real shape and bf16: which conclusions survive, the price of dropping precision, the two bills paid separately, the Pareto frontier) | EN |
 | `README.md` | Chinese front page (authoritative) | ZH |
 | `writeups/paper_short.md` | Chinese short paper (authoritative) | ZH |
 | `writeups/README.md` | deliverable index: §4 lists all 42 archived tables with their freshness credentials, §4.1 accounts for the 10 that never made the text, §7 limitations (honest version) | ZH |
-| `writeups/blog1_measurement.md` / `writeups/blog2_two_walls_placement.md` / `writeups/blog3_real_shape_bf16.md` | measurement discipline / the two walls and the price derivation / real shape + bf16 + decode | ZH (blog1 and blog2 also exist in English above; blog3 does not) |
+| `writeups/blog1_measurement.md` / `writeups/blog2_two_walls_placement.md` / `writeups/blog3_real_shape_bf16.md` | measurement discipline / the two walls and the price derivation / real shape + bf16 + decode | ZH (all three blogs now also exist in English above) |
 | `OPTLOG.md` | the lab log itself (4000+ lines: pre-registration, landing, bookings, invalidations) | ZH |
 | `results/` | **42 verdict tables + 5 five-process dumps from r5** | raw |
 
-🚨 **Translation status, stated plainly**: the short paper, this front page, **blog1** (`writeups/blog1_measurement_en.md`) and
-**blog2** (`writeups/blog2_two_walls_placement_en.md`) are translated; the remaining blog, the `writeups/README.md` index and `OPTLOG.md` are
-**not** — together they are about an order of magnitude longer than everything that is translated, and they are working logs, not claims.
-While translating, **no sentence of the Chinese originals was changed**: the only edit made to each of `paper_short.md`,
-`blog1_measurement.md` and `blog2_two_walls_placement.md` is an inserted pointer line at the top of the file — machine-checked in
-its own round as `git diff` **added 2 / deleted 0**. The Chinese front page's index was appended to, and in the blog2 round
-**one row added there was corrected**: it described the English blog1 as the translation of "the row above", while the Chinese
-original actually sits three rows lower — a stale pointer, fixed by 1 line added / 1 line deleted in `README.md` and registered in
-`OPTLOG.md` §5.2z. Every English file is machine-checked against its Chinese original (structure 1:1, and no number either lost or invented).
+🚨 **Translation status, stated plainly**: the short paper, this front page and **all three blogs** (`blog1_measurement_en.md`,
+`blog2_two_walls_placement_en.md`, `blog3_real_shape_bf16_en.md`) are translated; the `writeups/README.md` deliverable index and
+`OPTLOG.md` are **not** — together they are about an order of magnitude longer than everything that is translated, and they are
+working logs, not claims. While translating, **no sentence of the Chinese originals was changed**: the only edit made to each of
+`paper_short.md`, `blog1_measurement.md`, `blog2_two_walls_placement.md` and `blog3_real_shape_bf16.md` is an inserted pointer
+line near the top of the file — machine-checked in each round as `git diff` **added 2 / deleted 0**. The Chinese front page's
+index was appended to, and in the blog2 round **one row added there was corrected**: it described the English blog1 as the
+translation of "the row above", while the Chinese original actually sits three rows lower — a stale pointer, fixed by 1 line
+added / 1 line deleted in `README.md` and registered in `OPTLOG.md` §5.2z. Every English file is machine-checked against its
+Chinese original (structure 1:1, and no number either lost or invented), and the whole markdown set is re-validated in the same
+round: 166 tables with every column count consistent.
 
 **Term map** (for reading the Chinese tables): 空对照 = empty/never-firing control arm · `底_pair` = pair floor · `底_序` = order floor ·
 挂账 = booked unsettled (no verdict) · 预设判决树 = pre-registered decision tree · 前置 = pre-check · 落点 = landing ·
