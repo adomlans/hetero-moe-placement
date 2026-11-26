@@ -150,3 +150,6 @@ is deliberately not published**.
 　　and the **honest boundary** after the force-push (GitHub may retain the old objects for a while; clones made earlier keep the old
 　　blobs) are in `ATTRIBUTION.md` §5 row 4; the scan command is `ATTRIBUTION.md` §3 item ⑤. Apart from that one string the rewrite
 　　changed not a single byte (tip tree identical, diff = 0 bytes).
+　　**Measured update (2026-11-26)**: the force-push landed (remote tip = `ca3bd1a`) and a **fresh clone measures 0 across full history**;
+　　but fetching the discarded old tip SHA explicitly still retrieves the old history ⇒ the sentence above about retained objects is a
+　　measurement, not modesty (only a GitHub Support request or deleting and recreating the repository would remove them for good).

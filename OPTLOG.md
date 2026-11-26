@@ -4683,9 +4683,25 @@ md5 `13f8740c…`，2 块 × 5 gc × 2 dtype = 20 行，闸门 ①②③④⑤�
 - 🚨**诚实边界（写进公开面，不装成已经干净）**：强推之后 GitHub 侧仍可能**短时间内保留旧对象**（旧 commit 直接按 SHA 仍可能访问到；
   　要彻底清除需向 GitHub Support 申请，或删仓重建），期间**任何已克隆副本**照旧留有旧 blob
   　⇒「全历史 = 0」这个断言的适用范围 = **强推之后的新克隆**。这一条原话抄在 `ATTRIBUTION §5` 第 4 行与两个首屏。
-- **状态**：本地 `main` 与 `origin/main` **有意分叉**（祖先被改写），不 push 就公开面一字未变；
-  　待用户按 `--force-with-lease`（**唯一一次**允许强推，lease 值钉死 = 备份 ref 值），成功后立刻删备份 ref。
-  　**除此以外历史永不动**：本项目历史上会有第三次改写的可能性 = 0，因为「扫全历史」这条已经有机器守着。
+- **状态（原文照留在台账里，下面的补记才是现状态）**：本地 `main` 与 `origin/main` 当时**有意分叉**（祖先被改写），不 push 就公开面一字未变。
+
+#### 5.2w 补记【2026-11-26 · ✅ 强推已落地 + 新克隆实测 + 🚨「诚实边界」从推测升级成实测 + F 段诞生】
+
+- ✅**强推完成**（用户按键）：`--force-with-lease=main:2af3f7ac…` ⇒ 远端 `+ 2af3f7a...ca3bd1a main -> main (forced update)`，
+  　回读 `ls-remote origin` = `HEAD` 与 `refs/heads/main` **都 = `ca3bd1ad54ac3575d23eb3fdb1b0864eb276fbf7`**（lease 生效 ⇒ 期间没人推过）。
+- ✅**新克隆实测（公开面的唯一权威证据，走 SSH）**：`git clone` 到 `/tmp` ⇒ **23 条 commit**、tip `ca3bd1a`、
+  　四通道扫描 = **0**、工作树 `grep` 真邮箱 = **0** ⇒ 「新克隆拿到的是干净历史」是**量出来的**，不是承诺。
+- 🚨**「诚实边界」被实测坐实（这条是本轮最值钱的信息）**：显式 `git fetch origin 2af3f7ac4d…`（**已被强推甩掉的旧 tip**）**成功**
+  　⇒ 拉回 **70 个不在新历史里的对象**，其中 **10 个含隐私串** ⇒ GitHub 侧旧对象**尚未回收**，「可能短时仍留旧对象」不再是假设。
+  　彻底清除只有两条路（**都要用户点头**）：向 GitHub Support 申请清除，或删仓重建。⇒ 公开面 `ATTRIBUTION §5` 第 4 行与两个首屏已按实测措辞。
+- 🚨**这次 fetch 顺手暴露了机器自己的最后一个盲区**：`fetch` 成功后本机对象库**又被灌回旧 blob**，而 A~E 段全报 0
+  　（A 只扫分支可达对象 ⇒ 看不见 unreachable 的旧历史）。⇒ 新增 **F 段 = 对象库全量扫描**
+  　（`git cat-file --batch-all-objects --batch | grep -c -F -f ~/.pii_patterns`）⇒ 它当场报出 **10 处**，清法直接印在输出里。
+  　**本机收尾已完成**：`rm .git/FETCH_HEAD` + `reflog expire --expire=now --all` + `gc --prune=now`
+  　⇒ 旧 tip `cat-file` = could not get object info、`.git` grep = 0（那 41 处旧身份 reflog 一起清掉）、**F 段 = 0**、
+  　ref 只剩 `refs/heads/main` + `refs/remotes/origin/main`、`ahead/behind = 0/0`、工作树脏项 = 0、备份 ref 已删。
+- **现在的三道机器化防线**（都比口径硬）：① A~D 四通道扫分支全历史；② **F 段扫本机对象库（含 unreachable）**；③ 新克隆复扫。
+  　⇒ 「本仓库还要不要第四次改写」的答案由机器给出 = **不要**；历史自此**只往前加 commit**，本条就是本项目最后一次历史改写。
 
 ### 5.3 P2 —— 停止（写进"局限与未来工作"，不动手）
 
