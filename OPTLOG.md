@@ -4746,6 +4746,61 @@ md5 `13f8740c…`，2 块 × 5 gc × 2 dtype = 20 行，闸门 ①②③④⑤�
 - **状态**：C 还剩 **blog2（24331）/ blog3（15060）/ `writeups/README.md`（42009）** 三件 ⇒ 继续一刀一篇；
   　D（一页英文简历：`RESUME_onepage.md` 有 **7 处【】占位符**要用户先填）与 B 外发（= 第五轮外部评审）继续等点头；E 不动。
 
+### 5.2z 第二十八刀 · 选项 C 第二篇落地（blog2 英文版 = `writeups/blog2_two_walls_placement_en.md`）【✅ 已定稿 · 零新测量 · 零新数字 · 用户只按一条普通 push】
+
+**做了什么**：骨架新增 `writeups/blog2_two_walls_placement_en.md`（30317 字节 / 374 行 = 中文 blog2 24331 字节的逐段对译；
+英文件只活在骨架，工作区不建件，沿用 §5.2y 惯例）；中文正本只插一行页眉指针（增/删 = **2/0**）。
+
+**新机器 = 第 9 道闸门 `~/gv_align_check.py`（长文对译的结构断言，九项，逐条机器判）**：
+
+| 断言 | 判据 | blog2 实测 |
+|---|---|---|
+| 标题序列 | ZH 与 EN 的 `#` 层级序列逐位相同 | 18↔18 ✅ |
+| 逐表行数 | 13 张表的行数序列全等 | [5,4,5,4,4,5,4,7,7,5,5,5,7] ↔ 同 ✅ |
+| 逐表列数 | 每张表内部列数一致且两文件相同 | 13/13 ✅ |
+| 编号条目 / 代码围栏 | 个数相同 | 2↔2 / 2↔2 ✅ |
+| 正向数字溯源 | EN 独有数字必须 ∈ 中文正本 ∪ ALLOW | 230 数 / 12 md5，失败 **0** ✅ |
+| **反向数字断言** | ZH−EN 多重集差必须 = **0**（一个数都不许丢） | 首轮 **['0']** ❌ → 修后 **0** ✅ |
+| md5 锚点集合 | 双向差都 = 0 | ✅ |
+| 正文汉字泄漏 | 剥掉行内代码与数据源页脚后汉字 = **0**（甲/乙/丙/丁 归档标签豁免） | **0** ✅ |
+
+**反向断言第一次在真稿里抓到东西**：`> **计表轮逐臂 0 次决策**…` 被我译成单词 "Zero decisions" ⇒ 字面 `0` 消失 ⇒
+差集报 `['0']` ⇒ 改回 `**0 decisions per arm…**`。**教训：译文里把数字写成单词就是丢数，机器比人眼可靠。**
+
+**新闸门先在旧稿上校准再判新稿**：拿已上线的 blog1 对跑 ⇒ 结构五项与双向数字全过，唯一 ❌ = `丁`（归档序列标签，
+落在表格正文里且不在反引号内）⇒ 加 `LEAK_ALLOW = 甲乙丙丁`（理由：它们是归档文件名的字面标识，如
+`…乙-2_swiglu_realshape.txt`），加完 blog1 **9/9 PASS**。闸门没校准就判新稿 = 闸门本身是假的。
+
+**🚨抓到上一刀留下的公开面假话**：中文首屏目录把英文 blog1 写成「= **上一行**中文 blog1 的翻译件」，而那张表的上一行是
+`paper_short_en.md`、中文 blog1 在它下面三行 ⇒ 指针指向错。改成「= 下方 `blog1_measurement.md` 的翻译件」
+（**1 增 / 1 删**），并在英文首屏 Translation status 里**明写这条更正**，不静默改。
+本轮中文首屏增/删 = **2/1**（1 增 = blog2_en 目录行；1 增 1 删 = 那句改正）；`paper_short.md` / `blog1_measurement.md`
+本轮一字未动。
+
+**口径同步（不同步 = 陈旧即假话）**：`README.en.md` §4 表加一行 blog2_en；「三篇 blog」那行语言栏 →
+`ZH (blog1 and blog2 also exist in English above; blog3 does not)`；**Translation status 整段重写**（现口径 = 小论文 +
+首屏 + blog1 + blog2 已翻，剩 blog3 + `writeups/README.md` + OPTLOG 未翻；三篇已翻正本每篇只被插一行页眉指针、
+逐轮机器判据 `git diff` 增 2 删 0；并登记上面那条更正）。本轮 numstat：`README.en.md` **11/5**、`README.md` **2/1**、
+`blog2_two_walls_placement.md` **2/0**。
+
+**闸门复跑（全绿）**：① 13 个 MD 共 **155 张表 / 0 处列数不符**（新件 13 张全齐，比上一刀的 142 多 13）；
+② 四个 EN 溯源 **PASS**（`README.en` 98 数 11 md5 / `paper_short_en` 179/23 / `blog1_en` 168/4 / `blog2_en` **230/12**，
+失败全 0）；③ `make_ledger.py` **exit 0**（重跑两图后 status 未变 ⇒ 与已提交版逐字节同）；
+④ `results/*.txt` **42** + `results/dt_r5_dumps/*.json` **5**；⑤ 全历史隐私扫描（commit 后复跑，四通道 + F 段对象库）；
+⑧ 对齐断言 blog1 与 blog2 **双 PASS**。
+
+**残留汉字的正确口径（免得下次误读）**：`gv_num_trace.py` 打印的汉字清单**只提示、不进 rc**；权威判据是
+`gv_align_check.py` 的「剥掉行内代码与数据源页脚后正文汉字 = 0」。`blog2_en` 剩余汉字全部在**反引号内** =
+归档文件名的字面真名（`…P1-②附2附_dyn发数标度_dynpair_r2.txt` 这类带 `附` 的名字）与两张归档表的字面列名
+`配对可用` / `规则选gc`（页眉术语行已解释），外加甲/乙归档序列标签 —— 这些**照抄才是对的**，翻掉反而查不到档。
+
+**术语沿用上一刀 + 本刀定死**：腿 = leg · 判决表 = verdict table (run by hand by the user) · 挂账 = booked ·
+卡尺 = calliper · 独占口径 = exclusive-process basis · 归档 = archive · 平手规则 = tie-break rule ·
+编员集 = member set · 价签 = price tag · 兑现 = cash in · 掉队税 = straggler tax · 稠密税 = dense tax ·
+上限锚 = upper-bound anchor · 追踪率 = tracking rate。
+
+**下一刀**：C 第三篇 = `writeups/blog3_real_shape_bf16.md`（15060 字节）→ 第四件 = `writeups/README.md`（42009 字节）；
+仍一刀一篇、仍过九道闸门；blog3 若冒出「只在 blog 出现的数」，先判断是不是译文写错，再考虑进 ALLOW。
 ### 5.3 P2 —— 停止（写进"局限与未来工作"，不动手）
 
 - 🔴 丙类本机微优化全部冻结：VNNI、寄存器分块、`down` 的 gc 次 bmm 合图。
