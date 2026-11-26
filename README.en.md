@@ -140,7 +140,8 @@ index was appended to, and in the blog2 round **one row added there was correcte
 translation of "the row above", while the Chinese original actually sits three rows lower — a stale pointer, fixed by 1 line
 added / 1 line deleted in `README.md` and registered in `OPTLOG.md` §5.2z. Every English file is machine-checked against its
 Chinese original (structure 1:1, and no number either lost or invented), and the whole markdown set is re-validated in the same
-round: 166 tables with every column count consistent.
+round (every table's column count is machine-checked; we deliberately do not quote the table total here — appending a log
+section changes it, so any total written into this file would go stale within one round).
 
 **Term map** (for reading the Chinese tables): 空对照 = empty/never-firing control arm · `底_pair` = pair floor · `底_序` = order floor ·
 挂账 = booked unsettled (no verdict) · 预设判决树 = pre-registered decision tree · 前置 = pre-check · 落点 = landing ·
