@@ -1,5 +1,7 @@
 # 结项总览 —— CPU+GPU 两条腿跑 SwiGLU MoE（这台机器上每一项都按同一个模型付钱）
 
+> English version of this index: `README_en.md` (translation — where the two disagree, **the Chinese text wins**).
+
 > **四篇文档共用的写作红线**（写进每篇页眉，也写进 OPTLOG §4/§5.1.8）：
 > ① **一阶量与二阶量两列并报**：relRMSE/L2rel 与 top-1 一致率/KL/TV 必须同时出现，"误差 <1%" 不许单独成句（方法论 22：L2 差 11.6x 时 KL 差 303x，且 gc=0→1 那一格两列方向相反）。
 > ② **质量只报相对量，且必须附参照行**：把真第 8 层 MLP 换成"8 选 2 的 fp32 稠密 MoE"本身就值 KL 1.897e-01（bs=32）/ 8.854e-02（bs=128）、top-1 84.38%/86.72% ⇒ 比引擎最狠那档还贵 **668x / 871x**。本项目的任何 KL 都不许当绝对 ppl 用。

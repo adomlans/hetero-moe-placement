@@ -123,25 +123,30 @@ Verdict tables are run by the author and committed in full (machine state in the
 | `writeups/blog1_measurement_en.md` | **English blog1** (metrology: three error axes, two memory columns, two kinds of scales, ten gates, and how the ruler got proven unfit) | EN |
 | `writeups/blog2_two_walls_placement_en.md` | **English blog2** (the two walls, placement rule v1→v2, the four missing legs and the fifth: the price tag of a migration) | EN |
 | `writeups/blog3_real_shape_bf16_en.md` | **English blog3** (real shape and bf16: which conclusions survive, the price of dropping precision, the two bills paid separately, the Pareto frontier) | EN |
+| `writeups/README_en.md` | **English wrap-up index** (the translation of `writeups/README.md`: the claim and its three legs, §2 what is measured, the §4 verdict-table index with freshness credentials, §4.1 the ten files booked explicitly, §6.3 the four unsettled bookings, §7 limitations in the honest version) | EN |
 | `README.md` | Chinese front page (authoritative) | ZH |
 | `writeups/paper_short.md` | Chinese short paper (authoritative) | ZH |
-| `writeups/README.md` | deliverable index: §4 lists all 42 archived tables with their freshness credentials, §4.1 accounts for the 10 that never made the text, §7 limitations (honest version) | ZH |
+| `writeups/README.md` | deliverable index: §4 lists all 42 archived tables with their freshness credentials, §4.1 accounts for the 10 that never made the text, §7 limitations (honest version) | ZH (English version above) |
 | `writeups/blog1_measurement.md` / `writeups/blog2_two_walls_placement.md` / `writeups/blog3_real_shape_bf16.md` | measurement discipline / the two walls and the price derivation / real shape + bf16 + decode | ZH (all three blogs now also exist in English above) |
 | `OPTLOG.md` | the lab log itself (4000+ lines: pre-registration, landing, bookings, invalidations) | ZH |
 | `results/` | **42 verdict tables + 5 five-process dumps from r5** | raw |
 
-🚨 **Translation status, stated plainly**: the short paper, this front page and **all three blogs** (`blog1_measurement_en.md`,
-`blog2_two_walls_placement_en.md`, `blog3_real_shape_bf16_en.md`) are translated; the `writeups/README.md` deliverable index and
-`OPTLOG.md` are **not** — together they are about an order of magnitude longer than everything that is translated, and they are
-working logs, not claims. While translating, **no sentence of the Chinese originals was changed**: the only edit made to each of
-`paper_short.md`, `blog1_measurement.md`, `blog2_two_walls_placement.md` and `blog3_real_shape_bf16.md` is an inserted pointer
-line near the top of the file — machine-checked in each round as `git diff` **added 2 / deleted 0**. The Chinese front page's
-index was appended to, and in the blog2 round **one row added there was corrected**: it described the English blog1 as the
-translation of "the row above", while the Chinese original actually sits three rows lower — a stale pointer, fixed by 1 line
-added / 1 line deleted in `README.md` and registered in `OPTLOG.md` §5.2z. Every English file is machine-checked against its
-Chinese original (structure 1:1, and no number either lost or invented), and the whole markdown set is re-validated in the same
-round (every table's column count is machine-checked; we deliberately do not quote the table total here — appending a log
-section changes it, so any total written into this file would go stale within one round).
+🚨 **Translation status, stated plainly**: the short paper, this front page, **all three blogs** and now the deliverable index
+(`blog1_measurement_en.md`, `blog2_two_walls_placement_en.md`, `blog3_real_shape_bf16_en.md`, `README_en.md`) are translated;
+**only `OPTLOG.md` is left** — it is the working lab log, 4000+ lines of pre-registration, landing, bookings and
+invalidations, an order of magnitude longer than everything that is translated put together, and it is a log rather than a
+claim. The version of this paragraph before the present one said the deliverable index was **not** translated; that
+sentence went stale the moment `writeups/README_en.md` landed, so it is **corrected here rather than silently edited**.
+While translating, **no sentence of the Chinese originals was changed**: the only edit made to each of `paper_short.md`,
+`blog1_measurement.md`, `blog2_two_walls_placement.md`, `blog3_real_shape_bf16.md` and `writeups/README.md` is an inserted
+pointer line near the top of the file — machine-checked in each round as `git diff` **added 2 / deleted 0**. The Chinese front
+page's index was appended to, and **two stale pointers were corrected rather than left standing**: in the blog2 round a row
+that described the English blog1 as the translation of "the row above" (the Chinese original actually sits three rows lower),
+and in this round the header line of `README.md`, which named only `README.en.md` and `paper_short_en.md` as the English
+material after the set had already grown. Every English file is machine-checked against its Chinese original (structure 1:1,
+and no number either lost or invented), and the whole markdown set is re-validated in the same round (every table's column
+count is machine-checked; we deliberately do not quote the table total here — appending a log section changes it, so any
+total written into this file would go stale within one round).
 
 **Term map** (for reading the Chinese tables): 空对照 = empty/never-firing control arm · `底_pair` = pair floor · `底_序` = order floor ·
 挂账 = booked unsettled (no verdict) · 预设判决树 = pre-registered decision tree · 前置 = pre-check · 落点 = landing ·

@@ -1,5 +1,5 @@
 # 异构 MoE 的单价判据放置：一台 12 核台式机上的度量、价签与一个负结果
-> 英文首屏 = **`README.en.md`** ｜ 英文小论文 = **`writeups/paper_short_en.md`**（翻译件，与中文正本冲突时**以中文为准**；数字全部逐字照抄，机器断言见 `OPTLOG §5.2v`）
+> 英文首屏 = **`README.en.md`** ｜ 英文小论文 = **`writeups/paper_short_en.md`**（翻译件，与中文正本冲突时**以中文为准**；数字全部逐字照抄，机器断言见 `OPTLOG §5.2v`） ｜ **英文翻译件全套**（小论文 + 三篇 blog + 本索引）逐篇列在 `README.en.md` §4，与中文正本逐段对译、冲突时以中文为准
 
 
 在 CPU+GPU 异构机器上跑 MoE：热专家常驻 GPU、冷专家以 **int8 权重常驻 CPU 并按路由取用**、两条腿重叠，
@@ -70,6 +70,7 @@
 | `writeups/blog1_measurement_en.md` | **英文 blog1**（测量学：三根误差轴 / 两种显存口径 / 两类量表 / 十道闸门 / 预设判决树与那条偏移 = 下方 `blog1_measurement.md` 的翻译件） | 英语读者 |
 | `writeups/blog2_two_walls_placement_en.md` | **英文 blog2**（两堵墙与放置规则 v1→v2 / 四条腿与第五条腿的价签 = 下方 `blog2_two_walls_placement.md` 的翻译件） | 英语读者 |
 | `writeups/blog3_real_shape_bf16_en.md` | **英文 blog3**（真形状与 bf16：哪些结论活着 / 降精的价 / 两笔分开付的钱 / 帕累托前沿 = 下方 `blog3_real_shape_bf16.md` 的翻译件） | 英语读者 |
+| `writeups/README_en.md` | **英文结项总览**（= 下方 `writeups/README.md` 的翻译件：主张与三条腿 / §2 被测对象 / §4 判决表索引与保鲜凭据 / §4.1 十张显式记账 / §6.3 四次挂账 / §7 局限诚实版） | 英语读者 |
 | `writeups/paper_short.md` | **小论文（全文自洽版）**：摘要 + 8 节 + 局限 + 复现，每个数字括号标归档 md5 前 8 | 先读这个 |
 | `writeups/README.md` | 交付物索引：主张三条腿、被测对象、两张总账图、**§4 判决表索引（42 张归档逐张列保鲜凭据）**、**§4.1 没进正文的 10 张逐张记归属**、§7 局限（诚实版） | 查数字出处 |
 | `writeups/blog1_measurement.md` | 测量方法论：预设判决树、同进程轮转配对、空对照/正对照/上限锚、闸门 ⓪~⑨、尺子史 | 想知道「怎么保证没骗自己」 |
