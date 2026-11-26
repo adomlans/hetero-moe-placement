@@ -142,7 +142,7 @@ decision and cannot be the threshold.**
 
 ### 6.1 Observation: the timed rounds never fired
 
-`d9d54f5b` (n=25) reads the **decision counters** (immune to bimodality): **zero decisions per arm in the timed rounds**
+`d9d54f5b` (n=25) reads the **decision counters** (immune to bimodality): **0 decisions per arm in the timed rounds**
 (A1/A2/A3/C1/H1/H2 all 0 times / 0ms). ⇒ the "saves 20%~27%" seen in earlier dyn tables happened **outside the timed rounds**
 (at start-up), and under the timed caliber it can only be read as **【one-shot placement at start-up】**.
 

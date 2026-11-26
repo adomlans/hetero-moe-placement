@@ -128,25 +128,38 @@ Verdict tables are run by the author and committed in full (machine state in the
 | `writeups/paper_short.md` | Chinese short paper (authoritative) | ZH |
 | `writeups/README.md` | deliverable index: §4 lists all 42 archived tables with their freshness credentials, §4.1 accounts for the 10 that never made the text, §7 limitations (honest version) | ZH (English version above) |
 | `writeups/blog1_measurement.md` / `writeups/blog2_two_walls_placement.md` / `writeups/blog3_real_shape_bf16.md` | measurement discipline / the two walls and the price derivation / real shape + bf16 + decode | ZH (all three blogs now also exist in English above) |
+| `RESUME_onepage.md` / `RESUME_onepage_en.md` | **one-page resume** (the English file is the translation of the Chinese one; identity fields and no e-mail address — contact is via Issues) | ZH + EN (English translated) |
 | `OPTLOG.md` | the lab log itself (4000+ lines: pre-registration, landing, bookings, invalidations) | ZH |
 | `results/` | **42 verdict tables + 5 five-process dumps from r5** | raw |
 
-🚨 **Translation status, stated plainly**: the short paper, this front page, **all three blogs** and now the deliverable index
-(`blog1_measurement_en.md`, `blog2_two_walls_placement_en.md`, `blog3_real_shape_bf16_en.md`, `README_en.md`) are translated;
-**only `OPTLOG.md` is left** — it is the working lab log, 4000+ lines of pre-registration, landing, bookings and
-invalidations, an order of magnitude longer than everything that is translated put together, and it is a log rather than a
-claim. The version of this paragraph before the present one said the deliverable index was **not** translated; that
-sentence went stale the moment `writeups/README_en.md` landed, so it is **corrected here rather than silently edited**.
-While translating, **no sentence of the Chinese originals was changed**: the only edit made to each of `paper_short.md`,
-`blog1_measurement.md`, `blog2_two_walls_placement.md`, `blog3_real_shape_bf16.md` and `writeups/README.md` is an inserted
+🚨 **Translation status, stated as a rule instead of a list**: every file in this repository whose prose carries a claim now has
+an English counterpart, and **which** files those are is machine-decidable rather than remembered: `git ls-files | grep -E
+'_en\.md$|README\.en\.md$'` prints them. This file deliberately keeps no second enumeration of that set, because every such list
+written here has gone stale inside one round. **What is not translated and will not be: `OPTLOG.md`** — the working lab log,
+4000+ lines of pre-registration, landing, bookings and invalidations, an order of magnitude longer than everything translated put
+together, and a log rather than a claim — and **`ATTRIBUTION.md`**, whose content is upstream licence text, the scope statements this front page
+already makes in English, and the self-check commands — nothing in it is a measurement.
+
+While translating, **no sentence of the Chinese originals was changed**: the only edit made to any Chinese original is an inserted
 pointer line near the top of the file — machine-checked in each round as `git diff` **added 2 / deleted 0**. The Chinese front
-page's index was appended to, and **two stale pointers were corrected rather than left standing**: in the blog2 round a row
-that described the English blog1 as the translation of "the row above" (the Chinese original actually sits three rows lower),
-and in this round the header line of `README.md`, which named only `README.en.md` and `paper_short_en.md` as the English
-material after the set had already grown. Every English file is machine-checked against its Chinese original (structure 1:1,
-and no number either lost or invented), and the whole markdown set is re-validated in the same round (every table's column
-count is machine-checked; we deliberately do not quote the table total here — appending a log section changes it, so any
-total written into this file would go stale within one round).
+page's index was appended to, and **stale pointers were corrected rather than left standing, three of them**: in an early round a
+row that described the English blog1 as the translation of "the row above" (the Chinese original actually sits three rows lower);
+then the header line of `README.md`, which named only two files as the English material after the set had already grown; and in
+the present round the replacement text of that same header line, because it replaced one list with another list and a list goes
+stale the moment the next translation lands — it now points at the table above instead of enumerating. Corrections to this
+paragraph are likewise **kept rather than silently edited**: an earlier version said the deliverable index was **not** translated
+(stale the moment the English index landed) and the version immediately before this one said **only `OPTLOG.md` is left**, which
+was untrue at the moment it was written, because `ATTRIBUTION.md` had never been translated either.
+
+Every English file is machine-checked against its Chinese original (structure 1:1, and no number either lost or invented), and the
+whole markdown set is re-validated in the same round (every table's column count is machine-checked; we deliberately do not quote
+the table total here — appending a log section changes it, so any total written into this file would go stale within one round).
+
+**Retro-check, registered**: that alignment gate is **younger** than the oldest English file, and running it backwards over that
+file in the same round as the resume translation caught **1** real defect in it — a zero of the Chinese original had been rendered
+as the English word "zero" instead of the digit, which is exactly what the gate's reverse check (no number of the original may be
+lost) fails on. Fixed in the same round, so the sentence above about every English file being machine-checked became true only
+then; before that it was an over-claim about one file, and we record it as such instead of pretending otherwise.
 
 **Term map** (for reading the Chinese tables): 空对照 = empty/never-firing control arm · `底_pair` = pair floor · `底_序` = order floor ·
 挂账 = booked unsettled (no verdict) · 预设判决树 = pre-registered decision tree · 前置 = pre-check · 落点 = landing ·
